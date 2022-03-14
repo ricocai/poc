@@ -26,6 +26,21 @@ fn main(){
     // println!("Ho, {} + 1 = {}", rand_number, commutil::add_one(rand_number));
     println!("Ho, {} + 1 = {}", rand_number, addOne(rand_number));
 
+        let s: &Option<String> = &Some("hello".to_string());
+
+    match s {
+        Some(s) => println!("s is {}", s),
+        _=> (),
+    };
+
+    let mut v_key_words = vec![]; // vec!  macro
+    v_key_words.push("cai");
+    v_key_words.push("23");
+    println!("{:#?}",v_key_words);  // 使用 {:?} 或 {:#?}（后者更易读一些） 在 println! 中输出。
+    assert_eq!(v_key_words[1], 23.to_string());
+    let v2 = vec![5;10];
+    println!("number is {}", v2[9]);
+    
 }
 
 fn my_sayhi() -> u8 {
