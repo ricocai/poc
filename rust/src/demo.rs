@@ -1,5 +1,7 @@
 use std::env::{args, Args};
 use rand::Rng;
+use std::collections::BTreeMap;
+use std::collections::HashMap;
 use commutil::add_one as addOne;
 
 fn main(){
@@ -41,6 +43,17 @@ fn main(){
     let v2 = vec![5;10];
     println!("number is {}", v2[9]);
     
+    let mut hmap = HashMap::new();
+    let mut bmap =  BTreeMap::new();
+
+    hmap.insert(23, "rico");
+    hmap.insert(1, "yoyo");
+    hmap.insert(13, "meng");
+    bmap.insert("bj", 10);
+    bmap.insert("sh", 21);
+    bmap.insert("cq", 23);
+    println!("{:?}", hmap);
+    println!("{:?}", bmap);
 }
 
 fn my_sayhi() -> u8 {
