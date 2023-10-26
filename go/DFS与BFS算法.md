@@ -8,7 +8,7 @@
 
 
 # DFS
-
+```
 func dfs(grid **[]int, x int, y int) {
  isSkip := x < 0 || x >= m || y < 0 || y >= n || grid[x][y] != '1'
  if isSkip {
@@ -35,7 +35,7 @@ func numIslands(grid **[]int, gridSize int, gridColSize int) int {
  }
  return ret
 }
-
+```
 递归必须有个终止条件  （边界 + 符合条件的）
 遍历过的节点 做个标记，比如 grid[i][j] = '2'   对应是个值  0=48,1=49（ascii）
 
@@ -137,7 +137,111 @@ BFS（⼴度优先搜索）的算法框架：
 
 注意，我们的 BFS 算法框架也是 while 循环嵌套 for 循环的形式，也⽤了⼀个 step 变量记录 for 循环执⾏的次数，⽆⾮就是多⽤了⼀个 visited 集合记录⾛过的节点，防⽌⾛回头路罢了。
 
- 
+为什么BFS 找到的路径就是所有可能结果中最短的呢
+
+广度优先搜索找出来的就是最短路径
+按照所有的路线走，每次都在所有路线上走一步，第一个到达终点的就是最小路径
+
+https://leetcode-cn.com/problems/shortest-path-in-binary-matrix/
+
+ ```
+	func shortestPathBinaryMatrix(grid [][]int) int {
+	    if grid[0][0] != 0 {
+	        return -1
+	    }
+	    if len(grid) == 1 && len(grid[0]) == 1 {
+	        return 1
+	    }
+	    paths := [][]int{{1,1}, {1,0}, {0,1}, {0,-1}, {1,-1}, {-1,0}, {-1,1}, {-1,-1}}
+	    res := 1
+	    queue := make([][]int, 0, 8)
+	    queue = append(queue, []int{0, 0})
+	    for len(queue) != 0 {
+	        res++ // 注意这里++
+	        l := len(queue)
+	        for i := 0; i < l; i++ { // 注意这里找最短路径需要控制轮数
+	            cell := queue[0]
+	            queue = append(queue[1:])
+	            for _, path := range paths {
+	                x, y := cell[0]+path[0], cell[1]+path[1]
+	                if x < 0 || y < 0 || x >= len(grid) || y >= len(grid[0]) {
+	                    continue
+	                }
+	                if grid[x][y] == 0 {
+	                    grid[x][y] = res  // 给出记录+1，还可以避免重复计算
+	                    if x == len(grid)-1 && y == len(grid[0])-1 { // 最先到达终点即为最短路径
+	                        return grid[x][y]
+	                    }
+	                    queue = append(queue, []int{x, y})
+	                }
+	            }
+	        }
+	    }
+	    return -1
+	}
+```
+
+树的遍历
+
+后序遍历 https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/
+```
+	/**
+	 * Definition for a binary tree node.
+	 * type TreeNode struct {
+	 *     Val int
+	 *     Left *TreeNode
+	 *     Right *TreeNode
+	 * }
+	 */
+	func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+	    if root == nil {
+	        return root
+	    }
+	    if root == p || root == q {
+	        return root
+	    }
+	    leftHave := lowestCommonAncestor(root.Left, p, q) 
+	    rightHave := lowestCommonAncestor(root.Right, p, q)
+	    if leftHave != nil && rightHave != nil {
+	        return root
+	    }
+	    if leftHave == nil {
+	        return rightHave
+	    }
+	    return leftHave
+	}
+```
+
+中序典型题 https://leetcode-cn.com/problems/validate-binary-search-tree/
+```
+	/**
+	 * Definition for a binary tree node.
+	 * type TreeNode struct {
+	 *     Val int
+	 *     Left *TreeNode
+	 *     Right *TreeNode
+	 * }
+	 */
+	func isValidBST(root *TreeNode) bool {
+	    pre := math.MinInt64
+	    return task(root, &pre)
+	}
+	 
+	func task(root *TreeNode, pre *int) bool {
+	    if root == nil {
+	        return true
+	    }
+	    if !task(root.Left, pre) {
+	        return false
+	    }
+	    if root.Val <= *pre {
+	        return false
+	    }
+	    *pre = root.Val
+	    return task(root.Right, pre)
+	}
+```
+
 
 其实，Dijkstra 可以理解成⼀个带 dp table（或者说备忘录）的 BFS 算法
 
