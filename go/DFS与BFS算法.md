@@ -9,6 +9,36 @@
 
 # DFS
 
+func dfs(grid **[]int, x int, y int) {
+ isSkip := x < 0 || x >= m || y < 0 || y >= n || grid[x][y] != '1'
+ if isSkip {
+  return
+ }
+ grid[x][y] = '2'
+ dfs(grid, x-1, y)
+ dfs(grid,x,y+1)
+ dfs(grid, x+1, y)
+ dfs(grid,x, y-1)
+}
+
+func numIslands(grid **[]int, gridSize int, gridColSize int) int {
+ m := gridSize
+ n := gridColSize
+ ret := 0
+ for i:=0; i < m; i++ {
+  for j := 0; j < n; j++ {
+   if grid[i][j] == '1' {
+     dfs(grid, i, j)
+     ret++
+   }
+  }
+ }
+ return ret
+}
+
+递归必须有个终止条件  （边界 + 符合条件的）
+遍历过的节点 做个标记，比如 grid[i][j] = '2'   对应是个值  0=48,1=49（ascii）
+
 
 回溯算法就是个 N 叉树的前后序遍历问题，没有例外。
 
